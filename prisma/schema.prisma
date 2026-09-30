@@ -1,0 +1,141 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum FuelType {
+  Petrol
+  Diesel
+  Electric
+  Hybrid
+  CNG
+}
+
+enum TransmissionType {
+  Manual
+  Automatic
+}
+
+enum BodyType {
+  SUV
+  Sedan
+  Hatchback
+  MUV
+  Coupe
+}
+
+enum OwnershipType {
+  First
+  Second
+  Third
+  FourthOrMore
+}
+
+enum RequestStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model Car {
+  id               String           @id @default(cuid())
+  slug             String           @unique
+  brand            String
+  model            String
+  variant          String
+  year             Int
+  price            Float            // Stored in INR (e.g., 1425000 for 14.25 Lakh)
+  originalPrice    Float?           // Stored in INR
+  kmDriven         Int
+  fuel             FuelType
+  transmission     TransmissionType
+  bodyType         BodyType
+  ownership        String           // e.g. "1st Owner"
+  location         String           // City / Showroom
+  color            String
+  engine           String           // e.g. "1497 cc"
+  power            String           // e.g. "113 bhp @ 4000 rpm"
+  torque           String           // e.g. "250 Nm @ 1500-2750 rpm"
+  mileage          String           // e.g. "17.0 kmpl"
+  seatingCapacity  Int              @default(5)
+  bootSpace        String?          // e.g. "433 Litres"
+  insuranceValid   String           // e.g. "Comprehensive until Nov 2026"
+  registrationYear Int
+  featured         Boolean          @default(false)
+  conditionScore   Int              @default(90) // Out of 100
+  images           String[]         // Array of Cloudinary or image URLs
+  features         Json             // Grouped features: { comfort: [], safety: [], technology: [] }
+  inspectionScores Json?            // { engine: 95, exterior: 90, interior: 94, tyres: 88, electrical: 96, documents: 100 }
+  description      String
+  isSold           Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  testDrives       TestDriveBooking[]
+  enquiries        LeadEnquiry[]
+
+  @@index([brand, model])
+  @@index([price])
+  @@index([year])
+  @@index([featured])
+}
+
+model TestDriveBooking {
+  id            String        @id @default(cuid())
+  carId         String?
+  car           Car?          @relation(fields: [carId], references: [id], onDelete: SetNull)
+  name          String
+  phone         String
+  email         String
+  preferredDate DateTime
+  preferredTime String
+  status        RequestStatus @default(PENDING)
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([phone])
+}
+
+model LeadEnquiry {
+  id        String        @id @default(cuid())
+  carId     String?
+  car       Car?          @relation(fields: [carId], references: [id], onDelete: SetNull)
+  name      String
+  phone     String
+  email     String
+  message   String
+  type      String        @default("GENERAL") // GENERAL, CAR_ENQUIRY, FINANCE, EXCHANGE
+  status    RequestStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ValuationRequest {
+  id           String        @id @default(cuid())
+  regNumber    String
+  brand        String
+  model        String
+  year         Int
+  kmDriven     Int
+  fuel         String
+  transmission String
+  condition    String        // EXCELLENT, GOOD, FAIR, POOR
+  name         String
+  phone        String
+  email        String
+  estimatedMin Float?
+  estimatedMax Float?
+  images       String[]
+  status       RequestStatus @default(PENDING)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}

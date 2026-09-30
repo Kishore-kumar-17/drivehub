@@ -1,0 +1,35 @@
+export const DEALERSHIP_CONFIG = {
+  name: "DRIVEHUB",
+  legalName: "DRIVEHUB Automotive India Pvt. Ltd.",
+  tagline: "Trusted Pre-Owned Cars. Ready for the Road.",
+  phone: "+91 98765 43210",
+  phoneRaw: "919876543210",
+  whatsappNumber: "919876543210",
+  email: "contact@drivehubcars.com",
+  salesEmail: "sales@drivehubcars.com",
+  address: {
+    street: "Plot 42, Luxury Motor Mile, Anna Salai",
+    city: "Chennai",
+    state: "Tamil Nadu",
+    pincode: "600002",
+    country: "India",
+  },
+  hours: {
+    weekdays: "9:30 AM – 8:00 PM",
+    saturday: "9:30 AM – 8:30 PM",
+    sunday: "10:00 AM – 6:30 PM",
+  },
+  stats: {
+    carsSold: "500+",
+    yearsTrust: "5+",
+    inspectionPoints: "150+",
+    customerSatisfaction: "98%",
+    verifiedDocuments: "100%",
+  },
+  social: {
+    facebook: "https://facebook.com/drivehubcars",
+    instagram: "https://instagram.com/drivehubcars",
+    youtube: "https://youtube.com/@drivehubcars",
+    linkedin: "https://linkedin.com/company/drivehubcars",
+  },
+};
